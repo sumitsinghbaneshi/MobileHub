@@ -1,0 +1,25 @@
+﻿// api/db.json
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Smartphone X",
+      "price": 799,
+      "description": "A powerful smartphone with an amazing camera.",
+      "image": "https://via.placeholder.com/150",
+      "category": "Mobile"
+    },
+    {
+      "id": 2,
+      "name": "Budget Phone Y",
+      "price": 299,
+      "description": "A great phone for everyday use.",
+      "image": "https://via.placeholder.com/150",
+      "category": "Mobile"
+    }
+  ],
+  "categories": ["Mobile", "Accessory", "Spare Part"],
+  "cart": [],
+  "orders": [],
+  "users": []
+}
