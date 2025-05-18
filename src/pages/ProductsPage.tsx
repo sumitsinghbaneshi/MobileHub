@@ -1,15 +1,15 @@
 ﻿// src/pages/ProductsPage.tsx
-import { Typography } from "@mui/material";
-import ProductList from "../features/products/ProductList";
+import { Container, Typography } from '@mui/material';
+import ProductList from '../features/products/ProductList';
 
 const ProductsPage = () => {
   return (
-    <>
-      <Typography variant="h4" gutterBottom>
+    <Container>
+      <Typography variant="h4" component="h1" gutterBottom>
         Our Products
       </Typography>
       <ProductList />
-    </>
+    </Container>
   );
 };
 

@@ -1,24 +1,91 @@
-﻿// api/db.json
 {
   "products": [
     {
       "id": 1,
       "name": "Smartphone X",
-      "price": 799,
-      "description": "A powerful smartphone with an amazing camera.",
-      "image": "https://via.placeholder.com/150",
-      "category": "Mobile"
+      "description": "A high-end smartphone with a stunning display and powerful processor.",
+      "price": 79999,
+      "category": "Mobile",
+      "image": "/images/smartphone-x.jpg",
+      "stock": 10
     },
     {
       "id": 2,
       "name": "Budget Phone Y",
-      "price": 299,
-      "description": "A great phone for everyday use.",
+      "description": "Affordable smartphone with all the essentials.",
+      "price": 14999,
+      "category": "Mobile",
+      "image": "/images/budget-phone-y.jpg",
+      "stock": 25
+    },
+    {
+      "id": 3,
+      "name": "Flagship Phone Z",
+      "price": 1200,
+      "description": "The ultimate mobile experience.",
       "image": "https://via.placeholder.com/150",
-      "category": "Mobile"
+      "category": "Mobile",
+      "stock": 25
+    },
+    {
+      "id": 4,
+      "name": "Phone Case A",
+      "price": 25,
+      "description": "Durable case for Smartphone X.",
+      "image": "https://via.placeholder.com/150",
+      "category": "Accessory",
+      "stock": 100
+    },
+    {
+      "id": 5,
+      "name": "Wireless Charger B",
+      "price": 49,
+      "description": "Fast wireless charging pad.",
+      "image": "https://via.placeholder.com/150",
+      "category": "Accessory",
+      "stock": 60
+    },
+    {
+      "id": 6,
+      "name": "Screen Replacement Kit",
+      "price": 100,
+      "description": "Replacement kit for Phone X",
+      "image": "https://via.placeholder.com/150",
+      "category": "Spare Part",
+      "stock": 30
+    },
+    {
+      "name": "leo phone",
+      "description": "dsjbdjsfbdsjfdsf",
+      "price": 123,
+      "category": "phone",
+      "image": "",
+      "stock": null,
+      "id": 7
     }
   ],
-  "categories": ["Mobile", "Accessory", "Spare Part"],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Mobile",
+      "description": "Smartphones and mobile devices"
+    },
+    {
+      "id": 2,
+      "name": "Accessory",
+      "description": "Mobile accessories"
+    },
+    {
+      "id": 3,
+      "name": "Spare Part",
+      "description": "Replacement parts for mobiles"
+    },
+    {
+      "id": 1747485720967,
+      "name": "Spare parts",
+      "description": "Spare parts"
+    }
+  ],
   "cart": [],
   "orders": [],
   "users": []

@@ -1,19 +1,15 @@
-﻿// api/server.js
 const jsonServer = require('json-server');
-const cors = require('cors');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const express = require('express');
-
 const server = jsonServer.create();
 const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 // Set up multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = path.join(__dirname, '..', 'public', 'uploads');
+    const uploadDir = path.join(__dirname, 'public', 'uploads');
     // Create uploads directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -41,25 +37,21 @@ const upload = multer({
   }
 });
 
-// Enable CORS
-server.use(cors());
-
-// Use default middlewares
+// Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares);
 
-// Serve static files
-server.use('/images', express.static(path.join(__dirname, '../public/images')));
-server.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
-
-// File upload endpoint (MUST be before router)
+// Add custom routes before JSON Server router
 server.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
-  res.json({ imageUrl: `/uploads/${req.file.filename}` });
+  // Return the file path relative to the public directory
+  res.json({ 
+    imageUrl: `/uploads/${req.file.filename}`
+  });
 });
 
-// Error handling middleware (also before router)
+// Error handling middleware
 server.use((err, req, res, next) => {
   console.error('Server error:', err);
   if (err instanceof multer.MulterError) {
@@ -71,11 +63,14 @@ server.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Mount the router LAST
+// Use default router
 server.use(router);
+
+// Serve static files from the public directory
+server.use('/uploads', require('express').static(path.join(__dirname, 'public', 'uploads')));
 
 const PORT = 3001;
 server.listen(PORT, () => {
   console.log(`JSON Server is running on port ${PORT}`);
-  console.log(`Upload directory: ${path.join(__dirname, '..', 'public', 'uploads')}`);
-});
+  console.log(`Upload directory: ${path.join(__dirname, 'public', 'uploads')}`);
+}); 

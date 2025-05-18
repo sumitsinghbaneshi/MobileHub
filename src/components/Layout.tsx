@@ -1,19 +1,28 @@
 ﻿// src/components/Layout.tsx
-import { Container, CssBaseline, Toolbar } from "@mui/material";
+import { Box, Container, CssBaseline } from "@mui/material";
 import AppBar from "./AppBar";
 import Footer from "./Footer";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => {
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+      }}
+    >
       <CssBaseline />
       <AppBar />
-      <Toolbar /> {/* For spacing below app bar */}
-      <Container maxWidth="xl" sx={{ py: 3 }}>
+      <Container component="main" sx={{ mt: 4, mb: 4, flex: 1 }}>
         {children}
       </Container>
       <Footer />
-    </>
+    </Box>
   );
 };
 

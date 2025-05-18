@@ -5,7 +5,7 @@ import CheckoutStepper from "../features/checkout/CheckoutStepper";
 const CheckoutPage = () => {
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom>
         Checkout
       </Typography>
       <CheckoutStepper />
