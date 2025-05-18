@@ -151,7 +151,7 @@ const AdminPanel = () => {
     setSelectedCategory(null);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedImage(file);
@@ -160,23 +160,24 @@ const AdminPanel = () => {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-    }
-  };
 
-  const uploadImage = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-      const response = await axios.post('http://localhost:3001/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data.imageUrl;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw new Error('Failed to upload image. Please try again.');
+      // Upload the image immediately when selected
+      try {
+        const formData = new FormData();
+        formData.append('image', file);
+        const response = await axios.post('http://localhost:3001/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setFormData(prev => ({
+          ...prev,
+          image: response.data.imageUrl
+        }));
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        setError('Failed to upload image. Please try again.');
+      }
     }
   };
 
@@ -184,21 +185,11 @@ const AdminPanel = () => {
     e.preventDefault();
     try {
       if (openProductDialog) {
-        let imageUrl = formData.image;
-        if (selectedImage) {
-          try {
-            imageUrl = await uploadImage(selectedImage);
-          } catch (error) {
-            setError('Failed to upload image. Please try again.');
-            return;
-          }
-        }
-
         const productData = {
           ...formData,
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock),
-          image: imageUrl || 'https://via.placeholder.com/150', // Use placeholder if no image
+          image: formData.image || 'https://via.placeholder.com/150', // Use placeholder if no image
         };
 
         if (selectedProduct) {

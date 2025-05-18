@@ -21,15 +21,17 @@ interface CartItem {
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (productId: number) => Promise<void>;
-  removeFromCart: (itemId: number) => Promise<void>;
-  updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   loading: boolean;
   error: string | null;
+  addToCart: (product: Product) => Promise<void>;
+  removeFromCart: (itemId: number) => Promise<void>;
+  updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   clearError: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
+
+const API_BASE_URL = '/api';
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -49,43 +51,29 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const fetchCartItems = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3001/cart');
+      const response = await axios.get(`${API_BASE_URL}/cart`);
       setCartItems(response.data);
       setError(null);
     } catch (err) {
-      console.error('Error fetching cart:', err);
+      console.error('Error fetching cart items:', err);
       setError('Failed to fetch cart items');
     } finally {
       setLoading(false);
     }
   };
 
-  const addToCart = async (productId: number) => {
+  const addToCart = async (product: Product) => {
     if (!isAuthenticated) {
       throw new Error('Please login to add items to cart');
     }
 
     try {
       setLoading(true);
-      // First get the product details
-      const productResponse = await axios.get(`http://localhost:3001/products/${productId}`);
-      const product = productResponse.data;
-
-      // Check if item already exists in cart
-      const existingItem = cartItems.find(item => item.productId === productId);
-      if (existingItem) {
-        // Update quantity if item exists
-        await updateQuantity(existingItem.id, existingItem.quantity + 1);
-        return;
-      }
-
-      // Add new item to cart
-      const response = await axios.post('http://localhost:3001/cart', {
-        productId,
+      const response = await axios.post(`${API_BASE_URL}/cart`, {
+        productId: product.id,
         quantity: 1,
         product,
       });
-
       setCartItems(prevItems => [...prevItems, response.data]);
       setError(null);
     } catch (err) {
@@ -104,7 +92,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3001/cart/${itemId}`);
+      await axios.delete(`${API_BASE_URL}/cart/${itemId}`);
       setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
       setError(null);
     } catch (err) {
@@ -128,11 +116,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       setLoading(true);
-      const response = await axios.patch(`http://localhost:3001/cart/${itemId}`, {
-        quantity,
-      });
+      const response = await axios.patch(`${API_BASE_URL}/cart/${itemId}`, { quantity });
       setCartItems(prevItems =>
-        prevItems.map(item => (item.id === itemId ? response.data : item))
+        prevItems.map(item =>
+          item.id === itemId ? response.data : item
+        )
       );
       setError(null);
     } catch (err) {

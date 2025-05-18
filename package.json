@@ -2,6 +2,8 @@
     "name": "mobilehub",
     "private": true,
     "version": "0.0.0",
+    "homepage": "https://sumitsinghbaneshi.github.io/MobileHub",
+    "type": "module",
     "scripts": {
         "dev": "concurrently \"vite\" \"npm run api\"",
         "build": "tsc && vite build",

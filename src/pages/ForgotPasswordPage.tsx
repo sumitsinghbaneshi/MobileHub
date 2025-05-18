@@ -20,16 +20,19 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tempPassword, setTempPassword] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(false);
+    setTempPassword(null);
     setLoading(true);
 
     try {
-      await resetPassword(email);
+      const newPassword = await resetPassword(email);
       setSuccess(true);
+      setTempPassword(newPassword);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -54,7 +57,15 @@ const ForgotPasswordPage = () => {
         )}
         {success && (
           <Alert severity="success" sx={{ mb: 2 }}>
-            Password reset instructions have been sent to your email.
+            Your password has been reset. Please use this temporary password to log in:
+            <Box sx={{ mt: 1, p: 1, bgcolor: 'grey.100', borderRadius: 1 }}>
+              <Typography variant="body1" component="code">
+                {tempPassword}
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Please change your password after logging in.
+            </Typography>
           </Alert>
         )}
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
@@ -79,7 +90,7 @@ const ForgotPasswordPage = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading || success}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Send Reset Link'}
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Reset Password'}
           </Button>
           <Box sx={{ textAlign: 'center' }}>
             <Link component="button" variant="body2" onClick={() => navigate('/login')}>

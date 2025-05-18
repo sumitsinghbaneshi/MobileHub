@@ -22,10 +22,28 @@
       "name": "test",
       "description": "test ",
       "price": 1205,
-      "category": "Spare Part",
+      "category": "testing",
       "image": "/uploads/1747569054689-1742732007117.jpg",
       "stock": 5,
       "id": 3
+    },
+    {
+      "name": "new test ",
+      "description": "this is new test to check after fix ",
+      "price": 1205,
+      "category": "testing",
+      "image": "/uploads/1747571017248-Generated_Image_May_17__2025_-_1_46AM__1_.jpeg",
+      "stock": 2,
+      "id": 4
+    },
+    {
+      "name": "check check",
+      "description": "jdjd",
+      "price": 15,
+      "category": "testing",
+      "image": "https://via.placeholder.com/150",
+      "stock": 2,
+      "id": 5
     }
   ],
   "categories": [
@@ -43,20 +61,25 @@
       "id": 3,
       "name": "Spare Part",
       "description": "Replacement parts for mobiles"
+    },
+    {
+      "id": 1747571036542,
+      "name": "testing",
+      "description": "this is testing cat"
     }
   ],
   "cart": [
     {
-      "productId": 3,
+      "productId": 5,
       "quantity": 1,
       "product": {
-        "name": "test",
-        "description": "test ",
-        "price": 1205,
-        "category": "Spare Part",
-        "image": "/uploads/1747569054689-1742732007117.jpg",
-        "stock": 5,
-        "id": 3
+        "name": "check check",
+        "description": "jdjd",
+        "price": 15,
+        "category": "testing",
+        "image": "https://via.placeholder.com/150",
+        "stock": 2,
+        "id": 5
       },
       "id": 1
     }

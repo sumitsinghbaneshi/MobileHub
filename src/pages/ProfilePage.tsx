@@ -11,9 +11,11 @@ import {
   ListItemText,
   CircularProgress,
   Alert,
+  Button,
 } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import ChangePasswordDialog from '../components/ChangePasswordDialog';
 
 interface Order {
   id: number;
@@ -34,10 +36,15 @@ const ProfilePage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+    // Show change password dialog if user has temporary password
+    if (user?.isTempPassword) {
+      setShowChangePassword(true);
+    }
+  }, [user]);
 
   const fetchOrders = async () => {
     try {
@@ -87,6 +94,19 @@ const ProfilePage = () => {
               <Typography variant="body1">
                 <strong>Role:</strong> {user?.role}
               </Typography>
+              {user?.isTempPassword && (
+                <Alert severity="warning" sx={{ mt: 2 }}>
+                  You are using a temporary password. Please change it for security.
+                </Alert>
+              )}
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => setShowChangePassword(true)}
+                sx={{ mt: 2 }}
+              >
+                Change Password
+              </Button>
             </Box>
           </Grid>
           <Grid item xs={12}>
@@ -96,27 +116,19 @@ const ProfilePage = () => {
             </Typography>
             {orders.length === 0 ? (
               <Typography variant="body1" color="text.secondary">
-                No orders found
+                No orders found.
               </Typography>
             ) : (
               <List>
                 {orders.map((order) => (
                   <ListItem key={order.id} divider>
                     <ListItemText
-                      primary={`Order #${order.id} - ${new Date(order.date).toLocaleDateString()}`}
-                      secondary={
-                        <>
-                          {order.items.map((item) => (
-                            <Typography key={item.productId} variant="body2">
-                              {item.product.name} x {item.quantity} - ${item.product.price * item.quantity}
-                            </Typography>
-                          ))}
-                          <Typography variant="subtitle1" sx={{ mt: 1 }}>
-                            Total: ${order.total}
-                          </Typography>
-                        </>
-                      }
+                      primary={`Order #${order.id}`}
+                      secondary={`Date: ${new Date(order.date).toLocaleDateString()}`}
                     />
+                    <Typography variant="body1">
+                      Total: ${order.total.toFixed(2)}
+                    </Typography>
                   </ListItem>
                 ))}
               </List>
@@ -124,6 +136,11 @@ const ProfilePage = () => {
           </Grid>
         </Grid>
       </Paper>
+      <ChangePasswordDialog
+        open={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+        isTempPassword={user?.isTempPassword}
+      />
     </Container>
   );
 };
