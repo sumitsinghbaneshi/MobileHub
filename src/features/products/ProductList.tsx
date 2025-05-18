@@ -57,16 +57,17 @@ const ProductList = () => {
     }
   };
 
-  const handleAddToCart = async (productId: number) => {
+  const handleAddToCart = async (product: Product) => {
     if (!isAuthenticated) {
       navigate('/login', { state: { from: { pathname: '/products' } } });
       return;
     }
 
     try {
-      await addToCart(productId);
+      await addToCart(product);
       setSnackbar({ open: true, message: 'Item added to cart successfully!' });
     } catch (err) {
+      console.error('Error adding to cart:', err);
       if (err instanceof Error) {
         setSnackbar({ open: true, message: err.message });
       } else {
@@ -123,7 +124,7 @@ const ProductList = () => {
                   color="primary"
                   fullWidth
                   sx={{ mt: 2 }}
-                  onClick={() => handleAddToCart(product.id)}
+                  onClick={() => handleAddToCart(product)}
                   disabled={product.stock === 0}
                 >
                   {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
